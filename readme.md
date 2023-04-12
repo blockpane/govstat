@@ -70,5 +70,7 @@ $ govstat
 ## Installation
 
 ```bash
-$ go install github.com/blockpane/govstat@latest
+$ git clone https://github.com/blockpane/govstat
+$ cd govstat
+$ go install ./...
 ```
