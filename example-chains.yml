@@ -1,0 +1,13 @@
+---
+
+# update the following with your own chain IDs, RPC endpoint, and validator addresses
+# repeat as needed for each chain you want to monitor
+
+chains:
+  - chain_id: "akashnet-2"
+    validator: "akash1zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+    node: "http://somehost:26657"
+  - chain_id: "injective-1"
+    validator: "inj1zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+    node: "http://someotherhost:26657"
+
