@@ -68,8 +68,9 @@ func main() {
 		}
 
 		response := &gov.QueryProposalsResponse{}
-		for _, path := range []string{"/cosmos.gov.v1beta1.Query/Proposals", "/cosmos.gov.v1.Query/Proposals"} {
-			pResp, err := client.ABCIQuery(context.Background(), path, q)
+		var prefix string
+		for _, path := range []string{"/cosmos.gov.v1beta1.Query", "/cosmos.gov.v1.Query"} {
+			pResp, err := client.ABCIQuery(context.Background(), path+"/Proposals", q)
 			if err != nil {
 				log.Printf("error getting votes %s\n", err)
 				continue
@@ -80,6 +81,7 @@ func main() {
 				continue
 			}
 			if len(response.Proposals) != 0 {
+				prefix = path
 				break
 			}
 		}
@@ -99,7 +101,7 @@ func main() {
 				log.Printf("error marshaling %s\n", err)
 				continue
 			}
-			pResp, err := client.ABCIQuery(context.Background(), "/cosmos.gov.v1beta1.Query/Vote", q)
+			pResp, err := client.ABCIQuery(context.Background(), prefix+"/Vote", q)
 			if err != nil {
 				log.Printf("error getting vote %s\n", err)
 				continue
