@@ -67,16 +67,21 @@ func main() {
 			continue
 		}
 
-		pResp, err := client.ABCIQuery(context.Background(), "/cosmos.gov.v1beta1.Query/Proposals", q)
-		if err != nil {
-			log.Printf("error getting votes %s\n", err)
-			continue
-		}
 		response := &gov.QueryProposalsResponse{}
-		err = response.Unmarshal(pResp.Response.Value)
-		if err != nil {
-			log.Printf("error unmarshaling %s\n", err)
-			continue
+		for _, path := range []string{"/cosmos.gov.v1beta1.Query/Proposals", "/cosmos.gov.v1.Query/Proposals"} {
+			pResp, err := client.ABCIQuery(context.Background(), path, q)
+			if err != nil {
+				log.Printf("error getting votes %s\n", err)
+				continue
+			}
+			err = response.Unmarshal(pResp.Response.Value)
+			if err != nil {
+				log.Printf("error unmarshaling %s\n", err)
+				continue
+			}
+			if len(response.Proposals) != 0 {
+				break
+			}
 		}
 
 		if len(response.Proposals) == 0 {
@@ -94,7 +99,7 @@ func main() {
 				log.Printf("error marshaling %s\n", err)
 				continue
 			}
-			pResp, err = client.ABCIQuery(context.Background(), "/cosmos.gov.v1beta1.Query/Vote", q)
+			pResp, err := client.ABCIQuery(context.Background(), "/cosmos.gov.v1beta1.Query/Vote", q)
 			if err != nil {
 				log.Printf("error getting vote %s\n", err)
 				continue
